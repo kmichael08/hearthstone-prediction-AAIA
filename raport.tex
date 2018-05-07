@@ -8,7 +8,7 @@
 
 \title{Predicting Win-rates of Hearthstone Decks}
 
-\author{Team kmichael08 - Michał Kuźba, Ryszard Poklewski-Koziełł}
+\author{Team kmichael08 - Michał Kuźba (Leader), Ryszard Poklewski-Koziełł}
 
 \date{\today}
 
@@ -32,10 +32,16 @@ With this approach we want to use regression - predict the win-rate as in the tr
 We used the following features:
 \begin{itemize}
 \item amount of each card in the given deck
-\item hero
+\item hero - one hot encoded
 \item player - one hot encoded
 \item player's win rate
-\item deck statistics as an aggregated (e.g. averaged) value across the cards of the deck. Here we used external data to retrieve information about the cards, such as attack or health.
+\item player's domination rate - for each match we calculated sum of winner's health, health and attack and armor of every unit. This is heuristic that is supposed to calculate how one sided the game was. It helped a little, but suprisingly value of this feature was very similar for every player.
+\end{itemize}
+
+Features we tried to use, but failed to get satisfactory result:
+\begin{itemize}
+\item deck statistics as an aggregated (e.g. averaged) value across the cards of the deck. Here we used external data to retrieve information about the cards, such as attack or health, but results were quite worse.
+\item enemy hero - one hot encoded - with this feature we evaluated winrate vs specific hero, so to get proper winrate we needed merge results in the wise way. This seemed to be promising, but because we didn't know distribution of games in final data, results were a little worse than standard approach.
 
 % TODO source of external data
 % TODO czy i jak uzylismy tych statystyk o przebiegu rozgrywki
@@ -51,8 +57,8 @@ We tried out the following model:
 \begin{itemize}
 \item Neural networks - simple dense neural network with one/two hidden layers and several variants of the layer sizes. It turned out to suffer from overfitting.
 \item Linear models - they underperform other methods
-\item Supported Vector Machines - gave the results comparable to the best ones, required careful choice of hyperparameters
-\item Gradient Boosting - with this model we obtained an optimal, final solution
+\item Gradient Boosting - with this model we obtained an optimal, final solution %to nie jest ostatecznie, czemu to jest złe
+\item Supported Vector Machines - with this model we obtained an optimal, final solution, required careful choice of hyperparameters
 \end{itemize}
 
 
