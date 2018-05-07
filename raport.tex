@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}
 
 \title{Predicting Win-rates of Hearthstone Decks}
 
@@ -35,30 +36,28 @@ We used the following features:
 \item hero - one hot encoded
 \item player - one hot encoded
 \item player's win rate
-\item player's domination rate - for each match we calculated sum of winner's health, health and attack and armor of every unit. This is heuristic that is supposed to calculate how one sided the game was. It helped a little, but suprisingly value of this feature was very similar for every player.
+\item player's domination rate - for each match we calculated sum of winner's health, health and attack and armor of every unit. This is heuristic that is supposed to calculate how one sided the game was. It helped a little, but surprisingly value of this feature was very similar for every player.
 \end{itemize}
 
 Features we tried to use, but failed to get satisfactory result:
 \begin{itemize}
-\item deck statistics as an aggregated (e.g. averaged) value across the cards of the deck. Here we used external data to retrieve information about the cards, such as attack or health, but results were quite worse.
+\item deck statistics as an aggregated (e.g. averaged) value across the cards of the deck. Here we used external data \cite{cards_api} to retrieve information about the cards, such as attack or health, but results were quite worse.
 \item enemy hero - one hot encoded - with this feature we evaluated winrate vs specific hero, so to get proper winrate we needed merge results in the wise way. This seemed to be promising, but because we didn't know distribution of games in final data, results were a little worse than standard approach.
 
-% TODO source of external data
-% TODO czy i jak uzylismy tych statystyk o przebiegu rozgrywki
-% TODO sprawdzic jakie faktycznie featury uzylismy w tym co zostalo zgloszone do wyslania
+
 \end{itemize}
 
 \section{Model}
 We experimented with models from several Machine Learning families.
 For the model selection we performed 8-fold Cross Validation. 
 In order to balance the choice of the optimal hyperparameters and the performance we applied Randomized Search.
-
 We tried out the following model:
 \begin{itemize}
 \item Neural networks - simple dense neural network with one/two hidden layers and several variants of the layer sizes. It turned out to suffer from overfitting.
 \item Linear models - they underperform other methods
-\item Gradient Boosting - with this model we obtained an optimal, final solution %to nie jest ostatecznie, czemu to jest złe
-\item Supported Vector Machines - with this model we obtained an optimal, final solution, required careful choice of hyperparameters
+\item Gradient Boosting - performed slightly worse than the optimal solution
+\item Supported Vector Machines - with this model we obtained an optimal, final solution, required careful choice of hyperparameters.
+The feature matrix is sparse - this might be the reason of SVM outperforming other algorithms.
 \end{itemize}
 
 
@@ -69,8 +68,9 @@ We tried to apply primitive ensembling technique - weighed mean of predictions f
 Our final solution achieved 5.76 RMSE score on the given subset of test data. We accredit both Knowledge Pit and Silver Bullet Lab as the institutions that provided data for the research.
 
 \begin{thebibliography}{9}
-\bibitem{nano3}
-  coś tam dodać tutaj?
+\bibitem{cards_api} \url{www.hearthstonejson.com} - source of cards statistics data
+
+
 
 \end{thebibliography}
 \end{document}
