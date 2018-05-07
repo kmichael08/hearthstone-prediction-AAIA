@@ -8,21 +8,59 @@
 
 \title{Predicting Win-rates of Hearthstone Decks}
 
-\author{Michał Kuźba, Ryszard Poklewski-Koziełł}
+\author{Team kmichael08 - Michał Kuźba, Ryszard Poklewski-Koziełł}
 
 \date{\today}
+
 
 \begin{document}
 \maketitle
 
 \section{Introduction}
 \label{sec:introduction}
+In this report we describe our approach for the task of predicting win-rates of a given deck and player in Hearthstone. 
+The lion's share of our effort focused on processing the given datasets.
+We tried out several Machine Learning approaches to obtain the satisfying model for the prediction task.
 
 \section{Preprocessing}
+We considered approaching the problem in two different manners - regression or classification with the probability as an output. 
+Finally we decided to create the training data with the following algorithm.
+
+For each given deck and player take the ratio of victories in the dataset.
+With this approach we want to use regression - predict the win-rate as in the training set.
+
+We used the following features:
+\begin{itemize}
+\item amount of each card in the given deck
+\item hero
+\item player - one hot encoded
+\item player's win rate
+\item deck statistics as an aggregated (e.g. averaged) value across the cards of the deck. Here we used external data to retrieve information about the cards, such as attack or health.
+
+% TODO source of external data
+% TODO czy i jak uzylismy tych statystyk o przebiegu rozgrywki
+% TODO sprawdzic jakie faktycznie featury uzylismy w tym co zostalo zgloszone do wyslania
+\end{itemize}
 
 \section{Model}
+We experimented with models from several Machine Learning families.
+For the model selection we performed 8-fold Cross Validation. 
+In order to balance the choice of the optimal hyperparameters and the performance we applied Randomized Search.
+
+We tried out the following model:
+\begin{itemize}
+\item Neural networks - simple dense neural network with one/two hidden layers and several variants of the layer sizes. It turned out to suffer from overfitting.
+\item Linear models - they underperform other methods
+\item Supported Vector Machines - gave the results comparable to the best ones, required careful choice of hyperparameters
+\item Gradient Boosting - with this model we obtained an optimal, final solution
+\end{itemize}
+
+
+
+We tried to apply primitive ensembling technique - weighed mean of predictions from different model of a similar performance but it came with no improvement.
 
 \section{Results}
+Our final solution achieved 5.76 RMSE score on the given subset of test data.
 
 \begin{thebibliography}{9}
 \bibitem{nano3}
