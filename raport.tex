@@ -35,14 +35,14 @@ We used the following features:
 \item amount of each card in the given deck
 \item hero - one hot encoded
 \item player - one hot encoded
-\item player's win rate
+\item player's win-rates
 \item player's domination rate - for each match we calculated sum of winner's health, health and attack and armor of every unit. This is heuristic that is supposed to calculate how one sided the game was. It helped a little, but surprisingly value of this feature was very similar for every player.
 \end{itemize}
 
 Features we tried to use, but failed to get satisfactory result:
 \begin{itemize}
 \item deck statistics as an aggregated (e.g. averaged) value across the cards of the deck. Here we used external data \cite{cards_api} to retrieve information about the cards, such as attack or health, but results were quite worse.
-\item enemy hero - one hot encoded - with this feature we evaluated winrate vs specific hero, so to get proper winrate we needed merge results in the wise way. This seemed to be promising, but because we didn't know distribution of games in final data, results were a little worse than standard approach.
+\item enemy hero - one hot encoded - with this feature we evaluated win-rates vs specific hero, so to get proper win-rates we needed merge results in the wise way. This seemed to be promising, but because we didn't know distribution of games in final data, results were a little worse than standard approach.
 
 
 \end{itemize}
@@ -62,7 +62,7 @@ The feature matrix is sparse - this might be the reason of SVM outperforming oth
 
 
 
-We tried to apply primitive ensembling technique - weighed mean of predictions from different model of a similar performance but it came with no improvement.
+We tried to apply primitive ensembling technique - weighted mean of predictions from different model of a similar performance but it came with no improvement.
 
 \section{Final words}
 Our final solution achieved 5.76 RMSE score on the given subset of test data. We accredit both Knowledge Pit and Silver Bullet Lab as the institutions that provided data for the research.
